@@ -21,9 +21,15 @@ class AuthorRepository extends AbstractRepository {
       ->from(Author::class, "a")
       ->leftJoin("a.books", "b")
       ->groupBy("a.id")
-      ->where(($parmas["includeDeleted"] ?? false) ? "1 = 1" : "a.deletedAt IS NULL")
+      ->where(($params["includeDeleted"] ?? false) ? "1 = 1" : "a.deletedAt IS NULL")
       ->setFirstResult($params["offset"] ?? 0)
       ->setMaxResults($params["limit"] ?? 50);
+      
+    if(isset($params["search"])){
+      $queryBuilder
+        ->andWhere("a.name LIKE :search")
+        ->setParameter("search", "%" . $params["search"] . "%");
+    }
     
     $paginator = new Paginator($queryBuilder);
   
