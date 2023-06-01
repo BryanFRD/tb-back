@@ -4,7 +4,7 @@ namespace App\DTO;
 
 use Symfony\Component\HttpFoundation\Response;
 
-class ServiceResponseDTO {
+class ServiceResponse {
   
   private mixed $data;
   private int $statusCode;
