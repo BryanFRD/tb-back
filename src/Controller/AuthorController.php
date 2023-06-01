@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Service\AuthorService;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -44,7 +45,7 @@ class AuthorController extends AbstractController {
     methods: "POST"
   )]
   public function createAuthor(Request $request): JsonResponse {
-    $response = $this->service->create($request->getContent(true));
+    $response = $this->service->save(json_decode($request->getContent(), true));
     
     return new JsonResponse($response->getData(), $response->getStatusCode());
   }
@@ -56,7 +57,7 @@ class AuthorController extends AbstractController {
     methods: "PUT"
   )]
   public function updateAuthor(Ulid $id, Request $request): JsonResponse {
-    $response = $this->service->update($id, $request->getContent(true));
+    $response = $this->service->update($id, json_decode($request->getContent(), true));
     
     return new JsonResponse($response->getData(), $response->getStatusCode());
   }
