@@ -62,6 +62,13 @@ class BookService extends AbstractRepositoryService {
     
     if(!isset($body["authorId"])){
       $authorResponse = $this->authorRepository->getById($body["authorId"]);
+      
+      if(empty($authorResponse->getErrors())){
+        return new ServiceResponse($authorResponse->getErrors(), $authorResponse->getStatusCode());
+      } else if(empty($authorResponse->getData())) {
+        return new ServiceResponse(statusCode: Response::HTTP_NOT_FOUND);
+      }
+      
       $bookResponse->getData()->setAuthor($authorResponse->getData());
     }
     
