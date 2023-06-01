@@ -5,12 +5,15 @@ namespace App\Entity;
 use DateTime;
 use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\IdGenerator\UlidGenerator;
 use Symfony\Bridge\Doctrine\Types\UlidType;
 use Symfony\Component\Uid\Ulid;
 
 abstract class AbstractEntity {
   
   #[ORM\Id]
+  #[ORM\GeneratedValue("CUSTOM")]
+  #[ORM\CustomIdGenerator(class: UlidGenerator::class)]
   #[ORM\Column(type: UlidType::NAME)]
   protected Ulid $id;
   
