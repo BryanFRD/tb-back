@@ -9,7 +9,7 @@ class ServiceResponseDTO {
   private mixed $data;
   private int $statusCode;
   
-  public function __construct(mixed $data, int $statusCode = Response::HTTP_OK){
+  public function __construct(mixed $data = [], int $statusCode = Response::HTTP_OK){
     $this->data = $data;
     $this->statusCode = $statusCode;
   }
