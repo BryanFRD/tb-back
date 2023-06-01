@@ -7,67 +7,67 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Uid\Ulid;
 
-class AuthorController extends AbstractController {
+class BookController extends AbstractController {
   
-  protected AuthorService $service;
+  protected BookService $service;
   
-  public function __construct(AuthorService $service){
+  public function __construct(BookService $service){
     $this->service = $service;
   }
   
   #[Route(
-    path: "authors",
-    name: "get_authors",
+    path: "books",
+    name: "get_books",
     methods: "GET"
   )]
-  public function getAuthors(Request $request): JsonResponse {
+  public function getBooks(Request $request): JsonResponse {
     $response = $this->service->getAll($request->query->all());
     
     return new JsonResponse($response->getData(), $response->getStatusCode());
   }
   
   #[Route(
-    path: "authors/{id}",
-    name: "get_author_by_id",
+    path: "books/{id}",
+    name: "get_book_by_id",
     requirements: ["id" => "[0-7][0-9A-HJKMNP-TV-Z]{25}"],
     methods: "GET"
   )]
-  public function getAuthorById(Ulid $id): JsonResponse {
+  public function getBookById(Ulid $id): JsonResponse {
     $response = $this->service->getById($id);
     
     return new JsonResponse($response->getData(), $response->getStatusCode());
   }
   
   #[Route(
-    path: "authors",
-    name: "create_author",
+    path: "books",
+    name: "create_book",
     methods: "POST"
   )]
-  public function createAuthor(Request $request): JsonResponse {
+  public function createBook(Request $request): JsonResponse {
     $response = $this->service->create($request->getContent(true));
     
     return new JsonResponse($response->getData(), $response->getStatusCode());
   }
   
   #[Route(
-    path: "authors/{id}",
-    name: "update_author",
+    path: "books/{id}",
+    name: "update_book",
     requirements: ["id" => "[0-7][0-9A-HJKMNP-TV-Z]{25}"],
     methods: "PUT"
   )]
-  public function updateAuthor(Ulid $id, Request $request): JsonResponse {
+  public function updateBook(Ulid $id, Request $request): JsonResponse {
     $response = $this->service->update($id, $request->getContent(true));
     
     return new JsonResponse($response->getData(), $response->getStatusCode());
   }
   
   #[Route(
-    path: "authors/{id}",
-    name: "delete_author",
+    path: "books/{id}",
+    name: "delete_book",
     requirements: ["id" => "[0-7][0-9A-HJKMNP-TV-Z]{25}"],
     methods: "DELETE"
   )]
-  public function deleteAuthor(Ulid $id): JsonResponse {
+  public function deleteBook(Ulid $id): JsonResponse {
     $response = $this->service->delete($id);
     
     return new JsonResponse($response->getData(), $response->getStatusCode());
