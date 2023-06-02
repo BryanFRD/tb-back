@@ -32,6 +32,12 @@ class BookRepository extends AbstractRepository {
         ->setParameter("search", "%" . $params["search"] . "%");
     }
     
+    if(isset($params["authorId"])){
+      $queryBuilder
+        ->andWhere("a.id = :authorId")
+        ->setParameter("authorId", $params["authorId"]->toBinary());
+    }
+    
     $paginator = new Paginator($queryBuilder);
   
     $result = [

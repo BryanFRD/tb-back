@@ -15,7 +15,8 @@ class BookValidator extends AbstractRepositoryValidator {
       "includeDeleted" => new Optional([new IsTrue()]),
       "offset" => new Optional([new Regex("/\d+/")]),
       "limit" => new Optional([new Regex("/\d+/")]),
-      "search" => new Optional([new Type("string")])
+      "search" => new Optional([new Type("string")]),
+      "authorId" => new Optional([new Regex("/[0-7][0-9A-HJKMNP-TV-Z]{25}/")])
     ]);
   }
   
