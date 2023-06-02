@@ -34,7 +34,9 @@ class Book extends AbstractEntity {
   public function jsonSerialize(): mixed {
     return array_merge(parent::jsonSerialize(),
       array(
-        "title" => $this->getTitle()
+        "title" => $this->getTitle(),
+        "authorId" => $this->getAuthor()->getId(),
+        "authorName" => $this->getAuthor()->getDeletedAt() === null ? $this->getAuthor()->getName() : "Anonyme"
       ),
     );
   }
