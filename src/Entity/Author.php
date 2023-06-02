@@ -30,7 +30,8 @@ class Author extends AbstractEntity {
   public function jsonSerialize(): mixed {
     return array_merge(parent::jsonSerialize(),
       array(
-        "name" => $this->getName()
+        "name" => $this->getDeletedAt() === null ? $this->getName() : "Anonyme",
+        "booksCount" => count($this->getBooks())
       ),
     );
   }
