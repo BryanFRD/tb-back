@@ -20,7 +20,7 @@ abstract class AbstractRepositoryValidator {
     $errorsArray = array();
     if(count($errors) > 0){
       foreach($errors as $error){
-        array_push($errorsArray, [$error->getPropertyPath(), $error->getMessage()]);
+        array_push($errorsArray, [$error->getPropertyPath() => $error->getMessage()]);
       }
     }
     
