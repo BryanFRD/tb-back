@@ -27,4 +27,12 @@ class Author extends AbstractEntity {
     return $this->books;
   }
   
+  public function jsonSerialize(): mixed {
+    return array_merge(parent::jsonSerialize(),
+      array(
+        "name" => $this->getName()
+      ),
+    );
+  }
+  
 }

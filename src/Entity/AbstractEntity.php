@@ -5,11 +5,12 @@ namespace App\Entity;
 use DateTime;
 use DateTimeZone;
 use Doctrine\ORM\Mapping as ORM;
+use JsonSerializable;
 use Symfony\Bridge\Doctrine\IdGenerator\UlidGenerator;
 use Symfony\Bridge\Doctrine\Types\UlidType;
 use Symfony\Component\Uid\Ulid;
 
-abstract class AbstractEntity {
+abstract class AbstractEntity implements JsonSerializable {
   
   #[ORM\Id]
   #[ORM\GeneratedValue("CUSTOM")]
@@ -23,7 +24,7 @@ abstract class AbstractEntity {
   #[ORM\Column]
   protected DateTime $updatedAt;
   
-  #[ORM\Column]
+  #[ORM\Column(nullable: true)]
   protected ?DateTime $deletedAt;
   
   public function getId(): Ulid {
@@ -54,6 +55,15 @@ abstract class AbstractEntity {
   
   public function softDelete(): void {
     $this->deletedAt = date_create(timezone: new DateTimeZone('EUROPE/Paris'));
+  }
+  
+  public function jsonSerialize(): mixed {
+    return array(
+      "id" => $this->getId(),
+      "createdAt" => $this->getCreatedAt(),
+      "updatedAt" => $this->getUpdatedAt(),
+      "deletedAt" => $this->getDeletedAt(),
+    );
   }
   
 }
