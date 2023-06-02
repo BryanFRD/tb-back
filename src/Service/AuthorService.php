@@ -23,7 +23,9 @@ class AuthorService extends AbstractRepositoryService {
     }
     
     $author = new Author();
-    $author->setName($body["name"]);
+    $author
+      ->setName($body["name"])
+      ->updateTimestamps();
     
     $response = $this->repository->save($author, $flush);
     
@@ -43,7 +45,7 @@ class AuthorService extends AbstractRepositoryService {
     
     $authorResponse = $this->repository->getById($id);
     
-    if(!isset($body["name"])){
+    if(isset($body["name"])){
       $authorResponse->getData()->setName($body["name"]);
     }
     

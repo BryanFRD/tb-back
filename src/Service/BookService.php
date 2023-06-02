@@ -27,7 +27,7 @@ class BookService extends AbstractRepositoryService {
       return new ServiceResponse($validatorResponse->getViolations(), Response::HTTP_BAD_REQUEST);
     }
     
-    $authorResponse = $this->authorRepository->getById($body["authorId"]);
+    $authorResponse = $this->authorRepository->getById(Ulid::fromString($body["authorId"]));
     
     if(!empty($authorResponse->getErrors())){
       return new ServiceResponse($authorResponse->getErrors(), $authorResponse->getStatusCode());
@@ -36,7 +36,8 @@ class BookService extends AbstractRepositoryService {
     $book = new Book();
     $book
       ->setTitle($body["title"])
-      ->setAuthor($authorResponse->getData());
+      ->setAuthor($authorResponse->getData())
+      ->updateTimestamps();
     
     $response = $this->repository->save($book, $flush);
     
@@ -56,14 +57,14 @@ class BookService extends AbstractRepositoryService {
     
     $bookResponse = $this->repository->getById($id);
     
-    if(!isset($body["title"])){
+    if(isset($body["title"])){
       $bookResponse->getData()->setTitle($body["title"]);
     }
     
-    if(!isset($body["authorId"])){
-      $authorResponse = $this->authorRepository->getById($body["authorId"]);
+    if(isset($body["authorId"])){
+      $authorResponse = $this->authorRepository->getById(Ulid::fromString($body["authorId"]));
       
-      if(empty($authorResponse->getErrors())){
+      if(!empty($authorResponse->getErrors())){
         return new ServiceResponse($authorResponse->getErrors(), $authorResponse->getStatusCode());
       } else if(empty($authorResponse->getData())) {
         return new ServiceResponse(statusCode: Response::HTTP_NOT_FOUND);

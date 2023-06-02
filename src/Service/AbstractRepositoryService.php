@@ -22,10 +22,16 @@ abstract class AbstractRepositoryService {
     $validatorResponse = $this->validator->validate($params, $this->validator->getParamsConstraint());
     
     if(!empty($validatorResponse->getViolations())){
-      return new ServiceResponse($validatorResponse, Response::HTTP_BAD_REQUEST);
+      return new ServiceResponse($validatorResponse->getViolations(), Response::HTTP_BAD_REQUEST);
     }
     
-    return new ServiceResponse($this->repository->getAll($params));
+    $response = $this->repository->getAll($params);
+    
+    if(!empty($response->getErrors())){
+      return new ServiceResponse($response->getErrors(), $response->getStatusCode());
+    }
+    
+    return new ServiceResponse($response->getData(), 200);
   }
   
   public function getById(Ulid $id): ServiceResponse {
@@ -49,7 +55,7 @@ abstract class AbstractRepositoryService {
       return new ServiceResponse($response->getErrors(), $response->getStatusCode());
     }
     
-    $response = $this->repository->delete($response->getData(), $flush, $soft);
+    $response = $this->repository->remove($response->getData(), $flush, $soft);
     if(!empty($response->getErrors())){
       return new ServiceResponse($response->getErrors(), $response->getStatusCode());
     }
