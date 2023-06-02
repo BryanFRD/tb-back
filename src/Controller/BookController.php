@@ -40,6 +40,18 @@ class BookController extends AbstractController {
   }
   
   #[Route(
+    path: "authors/{id}/books",
+    name: "get_author_books",
+    requirements: ["id" => "[0-7][0-9A-HJKMNP-TV-Z]{25}"],
+    methods: "GET"
+  )]
+  public function getBookByAuthor(Ulid $id, Request $request): JsonResponse {
+    $response = $this->service->getAll(array_merge($request->query->all(), ["authorId" => $id]));
+    
+    return new JsonResponse($response->getData(), $response->getStatusCode());
+  }
+  
+  #[Route(
     path: "books",
     name: "create_book",
     methods: "POST"
